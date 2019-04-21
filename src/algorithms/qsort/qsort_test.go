@@ -2,7 +2,7 @@
 * @Author: shishao
 * @Date:   2019-03-04 19:48:41
 * @Last Modified by:   shishao
-* @Last Modified time: 2019-03-04 19:53:19
+* @Last Modified time: 2019-04-21 22:17:05
  */
 
 package qsort
@@ -26,7 +26,7 @@ func TestQuickSort2(t *testing.T) {
 }
 
 func TestQuickSort3(t *testing.T) {
-	values := []int{5, 4, 3, 2, 1}
+	values := []int{5}
 	QuickSort(values)
 	if values[0] != 5 {
 		t.Error("Q;uickSort() failed. Got", values, "Expected 5 ")

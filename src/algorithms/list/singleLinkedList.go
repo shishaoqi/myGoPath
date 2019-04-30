@@ -34,6 +34,7 @@ func (head *Node)Append(val int) *Node {
 
 // insert
 func (head *Node)Insert(val, insertVal int) *Node {
+	isFind := false
 	currenN := head
 	for {
 		if currenN.value == val {
@@ -43,11 +44,14 @@ func (head *Node)Insert(val, insertVal int) *Node {
 				insertN.next = nextN
 			}
 			currenN.next = &insertN
+			isFind = true
 		}
 		if currenN.next != nil {
 			currenN = currenN.next
 		} else {
-			fmt.Errorf("not found value of %d, append %d  in the last of list", val, insertVal)
+			if !isFind {
+				fmt.Printf("not found value of %d, append %d  in the last of list\n", val, insertVal)
+			}
 			break
 		}
 	}

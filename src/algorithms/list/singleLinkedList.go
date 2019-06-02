@@ -5,61 +5,109 @@ import (
 	)
 
 type Node struct {
-	value int
+	data interface{}
 	next *Node
 }
 
 type LinkedList struct {
 	head *Node
+	tail *Node
 }
 
-// create
-func Create(val int) *Node{
-	return &Node{value: val}
+// Create
+func CreateNode(data interface{}) *Node {
+	return &Node{data: data}
 }
 
 // InsertFirst
-func (list *LinkedList)InsertFirst(i int) {
-	data := &Node{value: i}
+func (list *LinkedList)AddNodeHead(data interface{}) *Node {
+	node := &Node{data: data}
 	if list.head != nil {
-		data.next = list.head
+		node.next = list.head
 	}
-	list.head = data
+	list.head = node
+	return node
 }
 
-// append
+// Append
 // InsertLast
-func (list *LinkedList)Append(val int) {
-	newN := &Node{value: val}
+func (list *LinkedList)AddNodeTail(val interface{}) *Node {
+	node := &Node{data: val}
+
 	if list.head == nil {
-		list.head = newN
-		return
+		list.head = node
 	}
-	current := list.head
-	for current.next != nil {
-		current = current.next
+	if list.tail == nil {
+		list.tail = node
+		return node
 	}
-	current.next = newN
+
+	list.tail.next = node
+	list.tail = node
+	return node
 }
 
-// insert
-func (list *LinkedList)Insert(val, insertVal int) bool {
-	currenN := list.head
-	for currenN != nil{
-		if currenN.value == val {
-			nextN := currenN.next
-			insertN := Node{value: insertVal}
+func (list *LinkedList)InsertNode(oldNode *Node, data interface{}) bool {
+	insertN := Node{data: data}
+
+	node := list.head
+	for node != nil {
+		if node == oldNode {
+			nextN := node.next
 			if nextN != nil {
 				insertN.next = nextN
+			} else {
+				list.tail = &insertN
 			}
-			currenN.next = &insertN
+			node.next = &insertN
 			return true
 		}
-		currenN = currenN.next
+		node = node.next
+	}
+	fmt.Printf("not found node of %d, append %v  in the last of list\n", oldNode, data)
+	list.AddNodeTail(data)
+	return false
+}
+
+//
+func (list *LinkedList)InsertNodeByValue(oldVal, insertVal interface{}) bool {
+	node := list.head
+	for node != nil{
+		if node.data == oldVal {
+			nextN := node.next
+			insertN := Node{data: insertVal}
+			if nextN != nil {
+				insertN.next = nextN
+			} else {
+				list.tail = &insertN
+			}
+			node.next = &insertN
+			return true
+		}
+		node = node.next
 	}
 
-	fmt.Printf("not found value of %d, append %d  in the last of list\n", val, insertVal)
-	list.Append(insertVal)
+	fmt.Printf("not found value of %d, append %d  in the last of list\n", oldVal, insertVal)
+	list.AddNodeTail(insertVal)
+	return false
+}
+
+func (list *LinkedList)DelNode(delNode *Node) bool {
+	node := list.head
+	head := list.head
+	preNode := list.head
+
+	for node != nil {
+		if node == delNode {
+			if node == head {
+				list.head = node.next
+			}
+			preNode.next = node.next
+			return true
+		}
+		preNode = node
+		node = node.next
+	}
 	return false
 }
 
@@ -67,7 +115,7 @@ func (list *LinkedList)Insert(val, insertVal int) bool {
 func (list *LinkedList)RemoveByValue(val int) bool {
 	current := list.head
 	for current != nil {
-		if current.value == val {
+		if current.data == val {
 			list.head = current.next
 			return true
 		}
@@ -101,7 +149,7 @@ func (list *LinkedList)RemoveByIndex(index int) bool {
 func (list *LinkedList)SearchValue(val int) bool {
 	current := list.head
 	for current != nil {
-		if current.value == val {
+		if current.data == val {
 			list.head = current.next
 			return true
 		}
@@ -111,35 +159,30 @@ func (list *LinkedList)SearchValue(val int) bool {
 }
 
 // GetFirst
-func (list LinkedList) GetFirst() (int, bool) {
+func (list LinkedList) GetFirst() (*Node, bool) {
 	current := list.head
 	if current == nil {
-		return 0, false
+		return nil, false
 	}
-	return current.value, true
+	return current, true
 }
 
 // GetLast
-func (list LinkedList) GetLast() (int, bool) {
-	current := list.head
-	if current == nil {
-		return 0, false
-	}
-	last := current
-	for current != nil {
-		last = current
-		current = current.next
+func (list LinkedList) GetLast() (*Node, bool) {
+	tail := list.tail
+	if tail == nil {
+		return nil, false
 	}
 
-	return last.value, true
+	return tail, true
 }
 
-// iterate
+// Iterate
 func (list *LinkedList)Iterate() {
 	tempN := list.head
 	i := 0
 	for {
-		fmt.Printf("list node %d = %d\n", i, tempN.value)
+		fmt.Printf("list node %d = %d\n", i, tempN.data)
 		if tempN.next == nil {
 			break
 		}

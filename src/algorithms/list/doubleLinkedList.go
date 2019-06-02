@@ -1,11 +1,9 @@
 package list
 
-import "algorithms/interface"
-
 type DbNode struct {
-	data _interface.StuctType
-	pre DbNode
-	next DbNode
+	data interface{}
+	pre *DbNode
+	next *DbNode
 }
 
 type DblList struct {

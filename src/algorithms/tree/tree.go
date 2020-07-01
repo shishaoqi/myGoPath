@@ -39,7 +39,7 @@ func (node *Node) TraverseFunc(f func(*Node)){
 }
 
 func (node Node) Print() { // func print(node Node) {
-	fmt.Print(node.Value)
+	fmt.Print(node.Value, " ")
 }
 
 func (node *Node) SetValue(value int) {
